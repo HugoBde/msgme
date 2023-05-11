@@ -24,6 +24,7 @@ func generateContactFormSubmitHandler() func(http.ResponseWriter, *http.Request)
 
 	var valid bool
 
+	// Read environment variables
 	if app_pwd, valid = os.LookupEnv("APPLICATION_PASSWORD"); !valid {
 		logger.Fatal("APPLICATION_PASSWORD environment variable not set")
 	}
@@ -48,7 +49,7 @@ func generateContactFormSubmitHandler() func(http.ResponseWriter, *http.Request)
 		logger.Fatal("RECIPIENT environment variable not set")
 	}
 
-	// Static Auth struct
+	// Build our authentication struct
 	auth := smtp.PlainAuth("", username, app_pwd, auth_server)
 
 	// The actual route handler
@@ -75,13 +76,20 @@ func generateContactFormSubmitHandler() func(http.ResponseWriter, *http.Request)
 }
 
 func main() {
+	// Initialise logger
 	logger = log.New(os.Stderr)
 
+	// Load .env file
 	if err := godotenv.Load(); err != nil {
 		logger.Fatal("Failed to load .env file")
 	}
 
+	// Generate form submission handler
 	contactFormSubmitHandler := generateContactFormSubmitHandler()
+
+	// Map handler to /contact_form
 	http.HandleFunc("/contact_form", contactFormSubmitHandler)
+
+	// Start listening on port 8080
 	logger.Fatal(http.ListenAndServe(":8080", nil))
 }
