@@ -84,6 +84,14 @@ func main() {
 		logger.Fatal("Failed to load .env file")
 	}
 
+	var port_num string
+	var valid bool
+
+	if port_num, valid = os.LookupEnv("PORT"); !valid {
+		logger.Warn("Missing PORT environment variable. Defaulting to port 3000")
+		port_num = "3000"
+	}
+
 	// Generate form submission handler
 	contactFormSubmitHandler := generateContactFormSubmitHandler()
 
@@ -91,5 +99,5 @@ func main() {
 	http.HandleFunc("/contact_form", contactFormSubmitHandler)
 
 	// Start listening on port 8080
-	logger.Fatal(http.ListenAndServe(":8080", nil))
+	logger.Fatal(http.ListenAndServe(":"+port_num, nil))
 }
