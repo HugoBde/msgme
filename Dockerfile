@@ -14,6 +14,8 @@ FROM scratch
 WORKDIR /
 COPY .env .
 COPY --from=BUILDER /app/msgme .
+COPY /etc/ssl/hugobde.dev.crt /server.crt
+COPY /etc/ssl/hugobde.dev.key /server.key
 WORKDIR /etc/ssl/certs
 COPY --from=BUILDER /etc/ssl/certs/ca-certificates.crt .
 WORKDIR /

@@ -99,5 +99,5 @@ func main() {
 	http.HandleFunc("/contact_form", contactFormSubmitHandler)
 
 	// Start listening on port 8080
-	logger.Fatal(http.ListenAndServe(":"+port_num, nil))
+	logger.Fatal(http.ListenAndServeTLS(":"+port_num, "server.crt", "server.key", nil))
 }
