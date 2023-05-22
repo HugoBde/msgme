@@ -61,10 +61,11 @@ func generateContactFormSubmitHandler() func(http.ResponseWriter, *http.Request)
 		}
 
 		// Build message from form data
-		msg := []byte(fmt.Sprintf("Subject: Website Enquiry Form\r\nFrom: HugoBde.io\r\nTo: bouderliqueh@gmail.com\r\n\r\nBody: %s\r\n\r\nContact Email: %s\r\nContact Phone Number: %s",
-			r.FormValue("msg_body"),
+        msg := []byte(fmt.Sprintf("Subject: Website Enquiry Form\r\nFrom: HugoBde.io\r\nTo: bouderliqueh@gmail.com\r\n\r\nName: %s\r\nContact Email: %s\r\nContact Phone Number: %s\r\n\r\nBody: %s",
+			r.FormValue("contact_name"),
 			r.FormValue("contact_email"),
-			r.FormValue("contact_phone_no")))
+			r.FormValue("contact_phone_no"),
+			r.FormValue("msg_body")))
 
 		// Send Email to myself
 		err := smtp.SendMail(sending_server, auth, sender, []string{recipient}, msg)
