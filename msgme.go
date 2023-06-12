@@ -54,14 +54,22 @@ func generateContactFormSubmitHandler() func(http.ResponseWriter, *http.Request)
 
 	// The actual route handler
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Parse the request form data into r.Form (GET) and r.PostForm (POST)
+        // Ensure we called using a POST method
+        if r.Method != "POST" {
+            w.WriteHeader(405)
+            return
+        }
+
+		// Parse the request form data into r.PostForm 
 		if err := r.ParseForm(); err != nil {
 			logger.Error(err)
+            w.WriteHeader(500)
 			return
 		}
 
 		// Build message from form data
-        msg := []byte(fmt.Sprintf("Subject: Website Enquiry Form\r\nFrom: HugoBde.io\r\nTo: bouderliqueh@gmail.com\r\n\r\nName: %s\r\nContact Email: %s\r\nContact Phone Number: %s\r\n\r\nBody: %s",
+        msg := []byte(fmt.Sprintf("Subject: Website Enquiry Form\r\nFrom: hugobde.dev\r\nTo: %s\r\n\r\nName: %s\r\nContact Email: %s\r\nContact Phone Number: %s\r\n\r\nBody: %s",
+            recipient,
 			r.FormValue("contact_name"),
 			r.FormValue("contact_email"),
 			r.FormValue("contact_phone_no"),
@@ -72,6 +80,8 @@ func generateContactFormSubmitHandler() func(http.ResponseWriter, *http.Request)
 
 		if err != nil {
 			logger.Error(err)
+            w.WriteHeader(500)
+            return
 		}
 	}
 }
