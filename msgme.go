@@ -97,21 +97,21 @@ func main() {
 
 	var port_num string
 	var valid bool
-    var cert_file string
-    var key_file string 
+	var cert_file string
+	var key_file string
 
 	if port_num, valid = os.LookupEnv("PORT"); !valid {
 		logger.Warn("Missing PORT environment variable. Defaulting to port 3000")
 		port_num = "3000"
 	}
 
-    if cert_file, valid = os.LookupEnv("CERT_FILE"); !valid {
-        logger.Fatal("Missing CERT_FILE environment variable")
-    }
-    
-    if key_file, valid = os.LookupEnv("KEY_FILE"); !valid {
-        logger.Fatal("Missing KEY_FILE environment variable")
-    }
+	if cert_file, valid = os.LookupEnv("CERT_FILE"); !valid {
+		logger.Fatal("Missing CERT_FILE environment variable")
+	}
+
+	if key_file, valid = os.LookupEnv("KEY_FILE"); !valid {
+		logger.Fatal("Missing KEY_FILE environment variable")
+	}
 
 	// Generate form submission handler
 	contactFormSubmitHandler := generateContactFormSubmitHandler()
